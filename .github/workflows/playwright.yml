@@ -14,14 +14,14 @@ jobs:
       with:
         node-version: lts/*
     - name: Install dependencies
-      run: npm ci
+      run: npm --prefix ./web_automation ci
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx --prefix ./web_automation playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx --prefix ./web_automation playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
-        path: playwright-report/
+        path: web_automation/playwright-report/
         retention-days: 30
