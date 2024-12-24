@@ -10,7 +10,8 @@
         "allowJs": true,
         "resolveJsonModule": true,
         "outDir": "dist",
-        "rootDir": "e2e"
+        "rootDir": "e2e",
+        "typeRoots": [ "../node_modules/@types" ]
     },
     "include": ["e2e/**/*.ts"],
     "exclude": ["node_modules", "dist", "playwright-report"]

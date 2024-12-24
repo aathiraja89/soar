@@ -26,10 +26,15 @@ export default defineConfig({
   reporter: [['html'], ['json', {outputFile: 'results.json'}]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    launchOptions: {
+      // 1
+      args: ["--start-maximized"],
+    },
     headless: false,
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://juice-shop.herokuapp.com',
-    viewport: { width: 1280, height: 720 },
+    // viewport: { width: 1280, height: 720 },
+    viewport: null,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     actionTimeout: 10 * 1000,
