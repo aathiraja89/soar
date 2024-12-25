@@ -1,0 +1,55 @@
+{
+  "cookies": [
+    {
+      "name": "language",
+      "value": "en",
+      "domain": "juice-shop.herokuapp.com",
+      "path": "/",
+      "expires": 1766652734,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "welcomebanner_status",
+      "value": "dismiss",
+      "domain": "juice-shop.herokuapp.com",
+      "path": "/",
+      "expires": 1766652736,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "cookieconsent_status",
+      "value": "dismiss",
+      "domain": "juice-shop.herokuapp.com",
+      "path": "/",
+      "expires": 1766652736,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "token",
+      "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6MjIsInVzZXJuYW1lIjoiIiwiZW1haWwiOiJhYXRoaUB5b3BtYWlsLmNvbSIsInBhc3N3b3JkIjoiZjkyNTkxNmUyNzU0ZTVlMDNmNzVkZDU4YTU3MzMyNTEiLCJyb2xlIjoiY3VzdG9tZXIiLCJkZWx1eGVUb2tlbiI6IiIsImxhc3RMb2dpbklwIjoidW5kZWZpbmVkIiwicHJvZmlsZUltYWdlIjoiL2Fzc2V0cy9wdWJsaWMvaW1hZ2VzL3VwbG9hZHMvZGVmYXVsdC5zdmciLCJ0b3RwU2VjcmV0IjoiIiwiaXNBY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjQtMTItMjUgMDQ6MDE6MTcuNjUyICswMDowMCIsInVwZGF0ZWRBdCI6IjIwMjQtMTItMjUgMDg6MTE6NDUuNDE3ICswMDowMCIsImRlbGV0ZWRBdCI6bnVsbH0sImlhdCI6MTczNTExNjczN30.ludLu1vjhLTsnH2FpVCvYW5gqsqhxadwKLrvX0nPESaV3JSbiVbqS7WrZSvRZNBGskjV2tDSeQUR_YEVOsKjHjIrnmgLExm6KvXX7xMjGQMgdPLURErh1_wnQIgY__VCt6V_QihRwHvr6P56j_2aAhgQnt2A42TRVvKynS_XAKQ",
+      "domain": "juice-shop.herokuapp.com",
+      "path": "/",
+      "expires": 1735145537,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://juice-shop.herokuapp.com",
+      "localStorage": [
+        {
+          "name": "token",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6MjIsInVzZXJuYW1lIjoiIiwiZW1haWwiOiJhYXRoaUB5b3BtYWlsLmNvbSIsInBhc3N3b3JkIjoiZjkyNTkxNmUyNzU0ZTVlMDNmNzVkZDU4YTU3MzMyNTEiLCJyb2xlIjoiY3VzdG9tZXIiLCJkZWx1eGVUb2tlbiI6IiIsImxhc3RMb2dpbklwIjoidW5kZWZpbmVkIiwicHJvZmlsZUltYWdlIjoiL2Fzc2V0cy9wdWJsaWMvaW1hZ2VzL3VwbG9hZHMvZGVmYXVsdC5zdmciLCJ0b3RwU2VjcmV0IjoiIiwiaXNBY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjQtMTItMjUgMDQ6MDE6MTcuNjUyICswMDowMCIsInVwZGF0ZWRBdCI6IjIwMjQtMTItMjUgMDg6MTE6NDUuNDE3ICswMDowMCIsImRlbGV0ZWRBdCI6bnVsbH0sImlhdCI6MTczNTExNjczN30.ludLu1vjhLTsnH2FpVCvYW5gqsqhxadwKLrvX0nPESaV3JSbiVbqS7WrZSvRZNBGskjV2tDSeQUR_YEVOsKjHjIrnmgLExm6KvXX7xMjGQMgdPLURErh1_wnQIgY__VCt6V_QihRwHvr6P56j_2aAhgQnt2A42TRVvKynS_XAKQ"
+        }
+      ]
+    }
+  ]
+}

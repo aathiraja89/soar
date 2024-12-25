@@ -70,7 +70,7 @@ export class HomeActions {
     return await test.step('Get in-stock products', async () => {
       await new CommonActions<Page>(this.homePage.page).waitForNetworkIdle();
       const allProducts = this.homePage.page.locator('mat-grid-tile mat-card > div.product');
-      const inStockProducts = allProducts.filter({ hasNot: allProducts.locator('div.ribbon-sold'), });
+      const inStockProducts = allProducts.filter({ hasNot: allProducts.locator('..').locator('div.ribbon-sold'), });
       const productNames = await inStockProducts.allTextContents();
       return productNames.map(name => {
         const match = name.match(/^[a-zA-Z ]+/);
@@ -89,7 +89,7 @@ export class HomeActions {
   async addProductsToBasket(productName: string) {
     const snackbar = this.homePage.page.locator('simple-snack-bar button');
     if (await snackbar.isVisible()){
-      await snackbar.click();
+      await snackbar.click({force: true});
       await new CommonActions<Page>(this.homePage.page).waitForNetworkIdle();
       // await new CommonActions<Page>(this.homePage.page).waitForTimeout(3);
     }

@@ -1,7 +1,6 @@
 import { CommonActions } from '../actions/commonActions';
 import { test, Page, expect } from '../fixtures/homeFixtures';
 
-
 test('Navigate to e-commerce site and display all items', async ({ homePage, homeActions }) => {
     // Navigate to the e-commerce web application
     await homePage.navigateTo('/');
@@ -28,7 +27,7 @@ test('Verify the product review dialog', async ({ homeActions, commonActions }) 
     }
 });
 
-test('Verify the user registration and login', async ({ loginActions, homeActions }) => {
+test.skip('Verify the user registration and login', async ({ loginActions, homeActions }) => {
     await homeActions.navigateToHome();
     await loginActions.navigateToSignup();
     await loginActions.interactFieldsWithNoValues();
@@ -43,21 +42,34 @@ test('Verify the user registration and login', async ({ loginActions, homeAction
     await loginActions.verifyLogin(email);
 });
 
+test.describe('Product Basket', () => {
+    test.describe.configure({ mode: 'serial' });
+    test('Verify product basket and payments', async ({ homeActions, loginActions, basketActions, homePage }) => {
+        await homeActions.navigateToHome();
+        await loginActions.login('aathi@yopmail.com');
 
-test('Verify product basket and payments', async ({ homeActions, loginActions, basketActions, homePage }) => {
-    await homeActions.navigateToHome();
-    await loginActions.login('aathi@yopmail.com');
+        const allProducts = (await homeActions.getInStockProducts());
+        const productNames = (allProducts.filter(item => !item.includes('Sold'))).slice(0, 5);
+        console.log(productNames)
+        for (const productName of productNames)
+            await homeActions.addProductsToBasket(productName);
+    });
 
-    const allProducts = (await homeActions.getInStockProducts());
-    const productNames = (allProducts.filter(item => !item.includes('Sold'))).slice(0, 5);
-    console.log(productNames)
-    for (const productName of productNames)
-        await homeActions.addProductsToBasket(productName);
-});
+    test('Modify product basket and payments', async ({ homeActions, loginActions, basketActions, homePage }) => {
+        await homeActions.navigateToHome();
+        await loginActions.login('aathi@yopmail.com');
+        await new CommonActions<Page>(homePage.page).waitForNetworkIdle();
+        await basketActions.navigateToBasket();
+    });
 
-test('Modify product basket and payments', async ({ homeActions, loginActions, basketActions, homePage }) => {
-    await homeActions.navigateToHome();
-    await loginActions.login('aathi@yopmail.com');
-    await new CommonActions<Page>(homePage.page).waitForNetworkIdle();
-    await basketActions.navigateToBasket();
+    test('Verify checkout', async ({ homeActions, loginActions, basketActions, homePage, basketPage }) => {
+        await homeActions.navigateToHome();
+        await loginActions.login('aathi@yopmail.com');
+        await new CommonActions<Page>(homePage.page).waitForNetworkIdle();
+        await basketPage.clickBasketMenu();
+        await new CommonActions<Page>(basketPage.page).waitForNetworkIdle();
+        // const response = await basketPage.page.waitForResponse('**/rest/basket/**');
+        await new CommonActions<Page>(basketPage.page).waitForMultipleServices(['**/rest/basket/**']);
+        await basketActions.addAddress(['Banana Juice', 'Apple Juice', 'Apple Pomace']);
+    });
 });

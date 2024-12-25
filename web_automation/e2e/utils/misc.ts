@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 /**
  * Finds the maximum numeric option from an array of options.
  * @param options - Array of option values.
@@ -27,4 +29,27 @@ export function extractAllNumbers(input: string): number[] {
 export function extractNumberFromText(input: string): number {
   const match = input.match(/(\d+)/); // Regex to match a number inside parentheses
   return match ? parseInt(match[1], 10) : 0;
+}
+
+interface UserData {
+  name: string;
+  phone: string;
+  zipcode: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+}
+
+export function generateUserData() : UserData {
+  return {
+    name: faker.person.fullName(),
+    phone: faker.string.numeric(10),
+    zipcode: faker.location.zipCode().split('-')[0],
+    address: faker.location.streetAddress(),
+    city: faker.location.city(),
+    state: faker.location.state(),
+    country: faker.location.country()
+  };
+
 }

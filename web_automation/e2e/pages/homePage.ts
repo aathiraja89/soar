@@ -30,18 +30,18 @@ export class HomePage {
     const product = this.page.locator(HomeLocators.item).filter({ hasText: name });
     await new CommonActions<Page>(this.page).waitForNetworkIdle();
     const addToBasket = product.getByLabel('Add to Basket');
-    // await expect(product).toBeVisible();
+    await expect(product).toBeVisible();
     // await addToBasket.waitFor({ state:  'visible', timeout: 5000 });
     const count = await addToBasket.count();
     console.log(`Count : ${count}`);
-    await addToBasket.first().scrollIntoViewIfNeeded();
-    await addToBasket.waitFor({ state: 'visible', timeout: 5000});
-    await addToBasket.click({force : true });
-    this.page.on("pageerror", (err) => {
-      console.log(err.message)
-    })
-    await expect(this.page.getByText(/Placed|Added another/)).toBeVisible();
-    await this.page.locator('simple-snack-bar button').click({force: true});
+    // await addToBasket.first().scrollIntoViewIfNeeded();
+    await addToBasket.waitFor({ state: 'visible', timeout: 5000 });
+    await addToBasket.click({ force: true });
+    // this.page.on("pageerror", (err) => {
+    //   console.log(err.message)
+    // })
+    await expect(this.page.getByText(/Placed|Added another/).first()).toBeVisible();
+    await this.page.locator('simple-snack-bar button').click({ force: true });
   }
 
   async getReviewText(): Promise<string> {
@@ -68,10 +68,10 @@ export class HomePage {
 
   // verifications
   async verifyProductDetailsDialog() {
-    await expect(this.page.locator(HomeLocators.dialog.container)).toBeVisible();
+    await expect(this.page.locator(HomeLocators.dialog.container).first()).toBeVisible();
   }
 
   async verifyReview() {
-    await expect(this.page.getByLabel(HomeLocators.dialog.reviewRating)).toBeVisible();
+    await expect(this.page.getByLabel(HomeLocators.dialog.reviewRating).first()).toBeVisible();
   }
 }

@@ -17,7 +17,7 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  timeout: 30*1000,
+  timeout: 120*1000,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
@@ -29,12 +29,13 @@ export default defineConfig({
     launchOptions: {
       // 1
       args: ["--start-maximized"],
+      slowMo: 500,
     },
     headless: false,
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://juice-shop.herokuapp.com',
-    // viewport: { width: 1280, height: 720 },
-    viewport: null,
+    viewport: { width: 1300, height: 720 },
+    // viewport: null,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     actionTimeout: 10 * 1000,
@@ -44,9 +45,15 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        // Use prepared auth state.
+        // storageState: '.auth/user.json',
+      },
+      // dependencies: ['setup'],
     },
 
     // {

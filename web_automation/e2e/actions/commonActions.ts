@@ -46,7 +46,20 @@ export class CommonActions<T extends Page> {
     await test.step('Wait for LoadStates', async () => {
       await Promise.all([this.page.waitForLoadState("networkidle"), this.page.waitForLoadState("domcontentloaded")]);
     });
-    }
+  }
+
+  async waitForMultipleServices(services: string[]): Promise<void> {
+    const promises = services.map(async (service) => {
+      try {
+        await this.page.waitForResponse((response) => {
+          return response.url().includes(service);
+        });
+      } catch (error) {
+        console.warn(`Service "${service}" not found.`);
+      }
+    });
+    await Promise.all(promises);
+  };
 
   async waitForTimeout(seconds: number) {
     await test.step(`Wait for ${seconds} seconds`, async () => {
