@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Assignment" verbose="1" parallel="tests"
+    thread-count="2" configfailurepolicy="continue" data-provider-thread-count="2">
+    <test name="Tasks" annotations="JDK" preserve-order="true">
+        <parameter name="tags" value="@dm1" />
+        <classes>
+            <class name="com.wikipedia.tests.WikipediaTest" />
+        </classes>
+    </test>
+</suite>
