@@ -7,6 +7,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.remote.MobileCapabilityType;
 
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
@@ -49,10 +50,10 @@ public class BaseTest {
 
 	@AfterMethod
 	public void afterMethod(Object[] testArgs) {
-		log(testArgs.toString());
+//		log(testArgs.toString());
 //		String methodName = ((Method) testArgs[0]).getName();
 //		ITestResult result = ((ITestResult) testArgs[1]);
-//		log(String.format("Test '%s' result: '%s'", methodName, result.toString()));
+//		log(String.format("Test '%s' result: '%s'", methodName, (result == null ? "" : result.toString())));
 		String udid = (String) testArgs[2];
 		Integer systemPort = (Integer) testArgs[3];
 
