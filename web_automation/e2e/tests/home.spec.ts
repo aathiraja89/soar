@@ -27,29 +27,30 @@ test('Verify the product review dialog', async ({ homeActions, commonActions }) 
     }
 });
 
-test.skip('Verify the user registration and login', async ({ loginActions, homeActions }) => {
-    await homeActions.navigateToHome();
-    await loginActions.navigateToSignup();
-    await loginActions.interactFieldsWithNoValues();
-    await loginActions.verifyValidationErrors();
-    await loginActions.verifyPasswordValidationErrors();
+test.describe.serial('Product Basket', () => {
+    let email: string;
+    let productNames: string[];
 
-    // Signup
-    const email = await loginActions.signup();
+    test('Verify the user registration and login', async ({ loginActions, homeActions }) => {
+        await homeActions.navigateToHome();
+        await loginActions.navigateToSignup();
+        await loginActions.interactFieldsWithNoValues();
+        await loginActions.verifyValidationErrors();
+        await loginActions.verifyPasswordValidationErrors();
 
-    // Login
-    await loginActions.login(email);
-    await loginActions.verifyLogin(email);
-});
+        // Signup
+        email = await loginActions.signup();
+        // Login
+        await loginActions.login(email);
+        await loginActions.verifyLogin(email);
+    });
 
-test.describe('Product Basket', () => {
-    test.describe.configure({ mode: 'serial' });
     test('Verify product basket and payments', async ({ homeActions, loginActions, basketActions, homePage }) => {
         await homeActions.navigateToHome();
-        await loginActions.login('aathi@yopmail.com');
+        await loginActions.login(email);
 
         const allProducts = (await homeActions.getInStockProducts());
-        const productNames = (allProducts.filter(item => !item.includes('Sold'))).slice(0, 5);
+        productNames = (allProducts.filter(item => !item.includes('Sold'))).slice(0, 5);
         console.log(productNames)
         for (const productName of productNames)
             await homeActions.addProductsToBasket(productName);
@@ -57,18 +58,18 @@ test.describe('Product Basket', () => {
 
     test('Modify product basket and payments', async ({ homeActions, loginActions, basketActions, homePage }) => {
         await homeActions.navigateToHome();
-        await loginActions.login('aathi@yopmail.com');
+        await loginActions.login(email);
         await new CommonActions<Page>(homePage.page).waitForNetworkIdle();
-        await basketActions.navigateToBasket();
+        await basketActions.updateBasketProductNVerifyPrices();
     });
 
     test('Verify checkout', async ({ homeActions, loginActions, basketActions, homePage, basketPage }) => {
         await homeActions.navigateToHome();
-        await loginActions.login('aathi@yopmail.com');
+        await loginActions.login(email);
         await new CommonActions<Page>(homePage.page).waitForNetworkIdle();
         await basketPage.clickBasketMenu();
         await new CommonActions<Page>(basketPage.page).waitForNetworkIdle();
         await new CommonActions<Page>(basketPage.page).waitForMultipleServices(['**/rest/basket/**']);
-        await basketActions.verifyCheckoutProcess(['Banana Juice', 'Apple Juice', 'Apple Pomace']);
+        await basketActions.verifyCheckoutProcess(productNames);
     });
 });

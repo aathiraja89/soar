@@ -44,6 +44,7 @@ export class CommonActions<T extends Page> {
         // await this.page.waitForLoadState('domcontentloaded');
         */
     await test.step('Wait for LoadStates', async () => {
+      await this.waitForTimeout(1);
       await Promise.all([this.page.waitForLoadState("networkidle"), this.page.waitForLoadState("domcontentloaded")]);
     });
   }
@@ -55,7 +56,7 @@ export class CommonActions<T extends Page> {
           return response.url().includes(service);
         });
       } catch (error) {
-        console.warn(`Service "${service}" not found.`);
+        console.log(`Service "${service}" not found.`);
       }
     });
     await Promise.all(promises);
