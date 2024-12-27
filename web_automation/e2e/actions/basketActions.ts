@@ -2,7 +2,6 @@ import { BasketPage } from '../pages/basketPage';
 import { test, Page, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { CommonActions } from './commonActions';
-import { generateUserData } from '../utils/misc';
 
 export class BasketActions {
   readonly basketPage: BasketPage;
@@ -12,77 +11,90 @@ export class BasketActions {
     this.basketPage = basketPage;
   }
 
-  async addAddress(products: string[]) {
-    await test.step('Add Address', async () => {
-      await this.basketPage.page.getByRole('button', { name: 'Checkout' }).click();
+  async productCheckout() {
+    await test.step('Product Checkout', async () => {
+      this.basketPage.clickCheckoutButton();
       await new CommonActions<Page>(this.basketPage.page).waitForMultipleServices(['**/api/Addresss']);
-      // await this.basketPage.page.waitForResponse('**/api/Addresss');
       await new CommonActions<Page>(this.basketPage.page).waitForNetworkIdle();
+    });
+  }
 
-      if (await this.basketPage.page.locator('mat-row').count() === 0) {
-        await this.basketPage.page.getByLabel('Add a new address').click();
-        await this.basketPage.page.getByPlaceholder('Please provide a country.').fill(generateUserData().country);
-        await this.basketPage.page.getByPlaceholder('Please provide a name.').fill(generateUserData().name);
-        await this.basketPage.page.getByPlaceholder('Please provide a mobile').pressSequentially(generateUserData().phone);
-        await this.basketPage.page.getByPlaceholder('Please provide a ZIP code.').fill(generateUserData().zipcode);
-        await this.basketPage.page.getByPlaceholder('Please provide an address.').fill(generateUserData().address);
-        await this.basketPage.page.getByPlaceholder('Please provide a city.').fill(generateUserData().city);
-        await this.basketPage.page.getByPlaceholder('Please provide a state.').fill(generateUserData().state);
-        await this.basketPage.page.getByRole('button', { name: 'send Submit' }).click();
-      }
+  async completeAddressSection() {
+    await test.step('Add Address and proceed to Payment', async () => {
+      // Add address with faker data
+      if (await this.basketPage.getRows().count() === 0)
+        await this.basketPage.addAddress();
 
-      await this.basketPage.page.locator('.mat-radio-outer-circle').first().click();
-      await this.basketPage.page.getByLabel('Proceed to payment selection').click();
+      await this.basketPage.selectRadioButton();
+      await this.basketPage.clickProceedToPayment();
+    });
+  }
 
-      // Payment Section
-      // await this.basketPage.page.waitForResponse('**/api/Deliverys');
+  // Payment Section
+  async completePaymentSection() {
+    await test.step('Add Payment details and proceed to Delivery', async () => {
       await new CommonActions<Page>(this.basketPage.page).waitForMultipleServices(['**/api/Deliverys']);
       await new CommonActions<Page>(this.basketPage.page).waitForNetworkIdle();
 
-      await this.basketPage.page.locator('.mat-radio-outer-circle').first().click();
-      await this.basketPage.page.getByLabel('Proceed to delivery method').click();
+      await this.basketPage.selectRadioButton();
+      await this.basketPage.clickProceedToDelivery();
+    });
+  }
 
-      if (await this.basketPage.page.locator('mat-row').count() === 0) {
-        await this.basketPage.page.getByRole('button', { name: 'Add new card Add a credit or' }).click();
-        await this.basketPage.page.getByLabel('Name *').fill('aathiraja');
-        await this.basketPage.page.getByLabel('Card Number *').fill('4111111111111111');
-        await this.basketPage.page.getByLabel('Expiry Month *').selectOption('12');
-        await this.basketPage.page.getByLabel('Expiry Year *').selectOption('2082');
-        await this.basketPage.page.getByRole('button', { name: 'send Submit' }).click();
-        await this.basketPage.page.getByText('Your card ending with 1111').click();
-        await this.basketPage.page.locator('.mat-radio-outer-circle').first().click();
-        await this.basketPage.page.getByLabel('Proceed to review').click();
-      }
+  async completeDeliverySection() {
+    await test.step('Add Delivery details, verify the purchase list and proceed to Review', async () => {
+      // Delivery Section
+      if (await this.basketPage.getRows().count() === 0)
+        await this.basketPage.addCreditCard();
 
-        await new CommonActions<Page>(this.basketPage.page).waitForMultipleServices(['**/api/Deliverys/**', '**/api/Addresss/**', '**/api/Cards/**', '**/rest/basket/**']);
-        // await this.basketPage.page.waitForResponse('**/api/Deliverys/**', { timeout: 5000 });
-        // await this.basketPage.page.waitForResponse('**/api/Addresss/**', { timeout: 5000 });
-        // await this.basketPage.page.waitForResponse('**/api/Cards/**', { timeout: 5000 });
-        // await this.basketPage.page.waitForResponse('**/rest/basket/**', { timeout: 5000 });
+      await this.basketPage.selectCreditCard();
+      await this.basketPage.clickProceedToReview();
 
+      await new CommonActions<Page>(this.basketPage.page).waitForMultipleServices(['**/api/Deliverys/**', '**/api/Addresss/**', '**/api/Cards/**', '**/rest/basket/**']);
       await new CommonActions<Page>(this.basketPage.page).waitForNetworkIdle();
+    });
+  }
 
-      let rows = this.basketPage.page.locator('mat-row');
+  async completeReviewSection(products: string[]): Promise<string | null> {
+    return await test.step('Verify product / payment / delivery details and complete purchase', async () => {
+      // Verify all products listed in review section
+      let rows = this.basketPage.getRows();
       for (const product of products)
         expect(await rows.filter({ hasText: product }).count()).toBeGreaterThan(0);
 
 
-      const itemPrice = await this.basketPage.page.locator('tr.mat-row', { hasText: 'Items' }).locator('td.price').textContent();
-      const deliveryPrice = await this.basketPage.page.locator('tr.mat-row', { hasText: 'Delivery' }).locator('td.price').textContent();
-      const totalPrice = await this.basketPage.page.locator('tr.mat-row', { hasText: 'Total Price' }).locator('td.price').textContent();
-
+      // Verify the prices in review screen
+      const itemPrice = await this.basketPage.getPricesInReviewSection('Items');
+      const deliveryPrice = await this.basketPage.getPricesInReviewSection('Delivery');
+      const totalPrice = await this.basketPage.getPricesInReviewSection('Total Price');
       expect(Number(itemPrice?.trim().slice(0, -1)) + Number(deliveryPrice?.trim().slice(0, -1))).toEqual(Number(totalPrice?.trim().slice(0, -1)))
-      await this.basketPage.page.getByLabel('Complete your purchase').click();
+      await this.basketPage.clickCompletePurchase();
 
-        // await this.basketPage.page.waitForResponse('**/rest/basket/*/checkout', { timeout: 5000 });
-        // await this.basketPage.page.waitForResponse('**/rest/track-order/**', { timeout: 5000 });
-        // await this.basketPage.page.waitForResponse('**/rest/basket/**', { timeout: 5000 });
-        await new CommonActions<Page>(this.basketPage.page).waitForMultipleServices(['**/rest/basket/*/checkout', '**/rest/track-order/**', '**/rest/basket/**']);
-        await new CommonActions<Page>(this.basketPage.page).waitForNetworkIdle();
+      await new CommonActions<Page>(this.basketPage.page).waitForMultipleServices(['**/rest/basket/*/checkout', '**/rest/track-order/**', '**/rest/basket/**']);
+      await new CommonActions<Page>(this.basketPage.page).waitForNetworkIdle();
+      return totalPrice;
+    });
+  }
 
-      await expect(this.basketPage.page.getByRole('heading', { name: 'Thank you for your purchase!' })).toBeVisible();
-      const totalPrice_Checkout = await this.basketPage.page.locator('mat-footer-cell.mat-column-total-price tr').last().textContent();
-      expect(Number(totalPrice_Checkout?.trim().slice(0, -1))).toEqual(Number(totalPrice?.trim().slice(0, -1)))
+  async verifyPurchaseCompletion(totalPrice: string) {
+    await test.step('Verify Purchase Completion', async () => {
+      // Verify purchase complete screen
+      await expect(this.basketPage.getPurchaseCompletedMessage()).toBeVisible();
+
+      // Verify purchase price
+      const totalPrice_Checkout = await this.basketPage.getPurchasePrice();
+      expect(Number(totalPrice_Checkout?.trim().slice(0, -1))).toEqual(Number(totalPrice?.trim().slice(0, -1)));
+    });
+  }
+
+  async verifyCheckoutProcess(products: string[]) {
+    await test.step('Add Address', async () => {
+      this.productCheckout();
+      this.completeAddressSection();
+      this.completePaymentSection();
+      this.completeDeliverySection();
+      const totalPrice = await this.completeReviewSection(products);
+      this.verifyPurchaseCompletion(totalPrice === null ? '' : totalPrice);
     });
   }
 
@@ -93,12 +105,10 @@ export class BasketActions {
       console.log('Items in basket: ' + itemsCount);
       await this.basketPage.clickBasketMenu();
       await new CommonActions<Page>(this.basketPage.page).waitForNetworkIdle();
-      // const response = await this.basketPage.page.waitForResponse('**/rest/basket/**');
       await new CommonActions<Page>(this.basketPage.page).waitForMultipleServices(['**/rest/basket/**']);
-      // const response = await responsePromise;
-      // console.log(JSON.stringify(await response.json(), null, 2));
+
       await this.basketPage.page.getByRole('button', { name: 'Checkout', disabled: false }).isVisible();
-      let rows = this.basketPage.page.locator('mat-row');
+      let rows = this.basketPage.getRows();;
       console.log('Rows in basket: ' + await rows.count());
       const productNameToUpdate = (await rows.first().locator('mat-cell.mat-column-product').textContent())?.trim();
       let productToUpdate = rows.filter({ hasText: productNameToUpdate });
@@ -123,12 +133,12 @@ export class BasketActions {
       expect(totalPriceActual).toEqual(totalPrice);
 
       // Delete
-      await productToUpdate.locator('mat-cell.mat-column-remove > button').click({force: true});
+      await productToUpdate.locator('mat-cell.mat-column-remove > button').click({ force: true });
       await new CommonActions<Page>(this.basketPage.page).waitForMultipleServices(['**/rest/basket/**', '**/api/BasketItems/**']);
       // await this.basketPage.page.waitForResponse('**/rest/basket/**');
       await new CommonActions<Page>(this.basketPage.page).waitForNetworkIdle();
 
-      rows = this.basketPage.page.locator('mat-row');
+      rows = this.basketPage.getRows();;
       productToUpdate = rows.filter({ hasText: productNameToUpdate });
       await new CommonActions<Page>(this.basketPage.page).waitForTimeout(2);
       expect(await productToUpdate.count()).toEqual(0);

@@ -68,8 +68,7 @@ test.describe('Product Basket', () => {
         await new CommonActions<Page>(homePage.page).waitForNetworkIdle();
         await basketPage.clickBasketMenu();
         await new CommonActions<Page>(basketPage.page).waitForNetworkIdle();
-        // const response = await basketPage.page.waitForResponse('**/rest/basket/**');
         await new CommonActions<Page>(basketPage.page).waitForMultipleServices(['**/rest/basket/**']);
-        await basketActions.addAddress(['Banana Juice', 'Apple Juice', 'Apple Pomace']);
+        await basketActions.verifyCheckoutProcess(['Banana Juice', 'Apple Juice', 'Apple Pomace']);
     });
 });
