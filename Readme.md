@@ -1,11 +1,11 @@
-# Automated Testing Projects
+# Soar - Tasks
 
-This repository showcases various automated testing projects using different tools and methodologies.
+This repository showcases various automated test tasks and other reports provided as tasks by Soar as a interview process.
 
 **Projects:**
 
 * **1. Web Automation using Playwright:**
-    * **Description:** This project demonstrates web automation tasks using the Playwright framework. 
+    * **Description:** This project demonstrates web automation tasks using the Playwright framework.
     * **Folder Structure:**
         * `web-automation/`:
             * `e2e/actions/`: Contains all the user actions test scripts (e.g., `homeActions.ts`, `basketActions.ts`).
@@ -17,36 +17,45 @@ This repository showcases various automated testing projects using different too
             * `eslint.config.mjs`: Configuration file for eslint.
             * `tsconfig.js`: Configuration file for TypeScript.
             * `package.json`: Contains project dependencies.
-    * **Installation:** 
-        1. Clone the repository: `[git clone https://github.com/aathiraja89/soar.git](https://github.com/aathiraja89/soar.git)`
+    * **Installation:**
+        1. Clone the repository: [git clone https://github.com/aathiraja89/soar.git](https://github.com/aathiraja89/soar.git)
         2. Navigate to the `web-automation` directory: `cd web-automation`
-        3. Install dependencies: `npm install` 
-    * **Running Tests:** `npx playwright test` 
+        3. Install dependencies: `npm install`
+    * **Running Tests:** `npx playwright test`
 
 * **2. Mobile Automation using Appium:**
-    * **Description:** This project demonstrates mobile automation tasks using the Appium framework.
-    * **Folder Structure:**
-        * `mobile-automation/`:
-            * `tests/`: Contains Appium test scripts (e.g., `android_tests.js`, `ios_tests.js`).
-            * `desired_capabilities/`: Contains desired capabilities files for different devices and platforms.
-            * `utils/`: Contains helper functions (e.g., `findElement.js`, `takeScreenshot.js`).
-            * `package.json`: Contains project dependencies (Appium, WebDriverIO, etc.).
-    * **Installation:** 
-        1. Clone the repository: `git clone <repository_url>`
-        2. Navigate to the `mobile-automation` directory: `cd mobile-automation`
-        3. Install dependencies: `npm install`
-    * **Running Tests:** Refer to the `README.md` file within the `mobile-automation` directory for specific instructions on running tests with Appium.
+
+    **Description:** This project demonstrates mobile automation tasks using the Appium framework.
+
+    **Prerequisites**
+    * **Java Development Kit (JDK):** Install and configure JDK on your system.
+    * **Maven:** Install Maven for project management and dependency management.
+    * **Node.js and npm:** Install Node.js and npm for managing Appium dependencies.
+    * **Android SDK:** Install the Android SDK and configure the necessary Android SDK tools (platform-tools, build-tools, etc.).
+    * **An Android device or emulator:** Set up an Android device or emulator for testing.
+    * **Appium Server:** Install and start the Appium server.
+    * **Device** Have devices connected / emulators started.
+
+    #### Folder Structure
+
+    * `mobile-automation/`:
+        * `src/main/java/com/actions/BaseTest.java`: Contains test annotations to control the flow of test execution, desired capabilities files for different devices and platforms.
+        * `src/main/java/com/actions/Hooks.java`: Contains methods to start/ stop the Appium server from code.
+        * `src/main/java/com/wikipedia/pages/<class>.java`: Contains the locators and page action methods respective to a page / fragment.
+        * `src/test/java/com/wikipedia/tests/<testClass>.java`: Contains Appium tests.
+        * `src/test/resources/configs/<config>.xml/`: Contains TestNG config for the test runner.
+        * `src/test/resources/`: Contains the apk file and other supporting resources for the test execution.
 
 * **3. Load/Stress Testing using K6:**
     * **Description:** This project demonstrates load and stress testing using the K6 tool.
     * **Folder Structure:**
-        * `load-testing/`:
-            * `load_test.js`: Contains the K6 script for load testing.
-            * `config.js`: Contains configuration for the test (e.g., number of virtual users, duration, ramp-up).
-    * **Installation:** 
-        1. Clone the repository: `git clone <repository_url>`
-        2. Navigate to the `load-testing` directory: `cd load-testing`
-        3. Install K6: `npm install k6` 
+        * `k6_loadtest/`:
+            * `tests/K6.js`: Contains the K6 script for load/stress testing.
+            * `utils/config.js`: Contains configuration for the execution metrics
+    * **Installation:**
+        1. Clone the repository: [git clone https://github.com/aathiraja89/soar.git](https://github.com/aathiraja89/soar.git)
+        2. Navigate to the `k6_loadtest` directory: `cd k6_loadtest`
+        3. Install K6: `npm install k6`
     * **Running Tests:** `k6 run load_test.js`
 
 **Submit Folder:**
@@ -60,6 +69,3 @@ This repository showcases various automated testing projects using different too
 
 * Node.js and npm installed (for all projects)
 * Java and Android SDK (for Appium mobile testing)
-* Docker or other containerization tools (optional, for managing dependencies and environments)
-
-This README provides a more comprehensive overview of the projects and their contents. You can further customize it by adding more specific details about each project, such as the technologies used, testing methodologies, and any other relevant information.
