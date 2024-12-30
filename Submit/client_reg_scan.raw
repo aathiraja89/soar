@@ -1,0 +1,18 @@
+POST http://localhost:5000/client_registeration HTTP/1.1
+User-Agent: PostmanRuntime/7.43.0
+Accept: */*
+Postman-Token: e9f5a929-141a-43fa-acf9-dc3cd221a735
+Connection: keep-alive
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 185
+Referer: http://localhost:5000/client_registeration
+Host: localhost:5000
+
+fullName=..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd&userName=Test12345&email=test12345%40test.com&password=test%401234&phone=9325478343HTTP/1.1 200 OK
+Server: Werkzeug/3.1.3 Python/3.13.1
+Date: Thu, 26 Dec 2024 17:51:24 GMT
+Content-Type: application/json
+Content-Length: 30
+Connection: close
+
+{"msg":"Email already Exist"}
