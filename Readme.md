@@ -18,7 +18,7 @@ This repository showcases various automated testing projects using different too
             * `tsconfig.js`: Configuration file for TypeScript.
             * `package.json`: Contains project dependencies.
     * **Installation:** 
-        1. Clone the repository: `[git clone <repository_url>](https://github.com/aathiraja89/soar.git)`
+        1. Clone the repository: `[git clone https://github.com/aathiraja89/soar.git](https://github.com/aathiraja89/soar.git)`
         2. Navigate to the `web-automation` directory: `cd web-automation`
         3. Install dependencies: `npm install` 
     * **Running Tests:** `npx playwright test` 
